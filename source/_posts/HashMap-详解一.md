@@ -1,12 +1,11 @@
 ---
 title: HashMap 详解一
 date: 2018-03-13 10:46:49
-tags: [HashMap]
+tags: [HashMap, 变量]
 ---
-
 *本文代码来自JDK8*
 
-#### 原理
+#### 实现原理
 1. 建立一个数组
 2. 根据元素哈希值计算数组索引, 保存到数组
 3. 索引号相同的元素通过链表保存
@@ -15,8 +14,8 @@ tags: [HashMap]
 ---
 
 #### 默认常量
-* 初始容量大小: DEFAULT_INITIAL_CAPACITY = 1 << 4 = 16
-* 最大容量大小: MAXIMUM_CAPACITY = 1 << 30
+* 初始长度大小: DEFAULT_INITIAL_CAPACITY = 1 << 4, 为了区分容量和元素数目, 这里就用长度表示容量
+* 最大长度大小: MAXIMUM_CAPACITY = 1 << 30
 * 默认加载因子: DEFAULT_LOAD_FACTOR = 0.75f
 * 链表转红黑树的阈值: TREEIFY_THRESHOLD = 8
 * 红黑树转链表的阈值: UNTREEIFY_THRESHOLD = 6
