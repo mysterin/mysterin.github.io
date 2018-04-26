@@ -4,6 +4,8 @@ date: 2018-04-23 14:47:33
 tags: [LinkedHashMap, 变量]
 ---
 
+*本文代码来自JDK8*
+
 #### 性质
 1. LinkedHashMap 继承于 HashMap, 具备 HashMap 的一切性质;
 2. LinkedHashMap 会按先后插入顺序对元素排序遍历;
