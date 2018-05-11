@@ -10,7 +10,7 @@ tags: [Hashtable]
  * 这里是通过 Collections.sysnchronizedSet 方法生成一个线程安全的 Set 实例
  * 实际是重写 Set 方法, 用对 this 也就是 Hashtable 的实例同步代码块包裹实际调用的方法
  * 而实际调用的都是 EntrySet 对应的方法
- * 这里就不展开说了, 详细可以看 Collections 类的内部类 SyschronizedCollection
+ * 这里就不展开说了, 详细可以看 Collections 类的内部类 SynchronizedCollection
  */
 public Set<Map.Entry<K,V>> entrySet() {
     if (entrySet==null)
