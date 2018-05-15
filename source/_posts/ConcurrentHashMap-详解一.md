@@ -33,7 +33,7 @@ ConcurrentHashMap 的插入方式跟 HashMap 是一样的, 唯一的区别就是
 
 #### 变量
 1. `transient volatile Node<K,V>[] table;`
-使用 volatile 修饰的数组, 具有线程可见性
+使用 volatile 修饰的数组, 针对该数组引用具有可见性, 对于数组元素没有可见性. 为了保证数组元素也有可见性, 这里就用 volatile 修饰 Node 类的 val 和 next.
 2. `private transient volatile Node<K,V>[] nextTable;`
 用来扩容时的临时数组
 3. `private transient volatile int sizeCtl;`

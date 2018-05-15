@@ -16,7 +16,10 @@ if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
 
 /**
  * 读取 tab 对应位置 i 的值
- * 这里使用原子读方式, 为什么要这样做暂时没搞明白
+ * 这里使用原子读方式, 为什么要这样做暂时没搞明白, 这里给出自己一个假设
+ * tab 的元素不是 volatile, 虽然节点把 val 和 next 设置 volatile
+ * 但 tab 索引的第一个元素不算 volatile, 如果 tab[i] 方式读取可能是读取工作内存的值
+ * 所以用原子读方式读取主内存的值才行
  */
 static final <K,V> Node<K,V> tabAt(Node<K,V>[] tab, int i) {
     return (Node<K,V>)U.getObjectVolatile(tab, ((long)i << ASHIFT) + ABASE);
@@ -62,8 +65,8 @@ synchronized (f) {
 	// 再次判断这个头结点是不是原来的头结点
 	// 这是为了防止在锁上前一刻被其他线程修改了
     if (tabAt(tab, i) == f) {
-    	// hash 值大于等于 0, 说明这是链表, 参考上一 part
-    	// 然后就是链表节点的插入了, 跟 HashMap 差不多, 可以参考 HashMap 详解
+        // hash 值大于等于 0, 说明这是链表, 参考上一 part
+        // 然后就是链表节点的插入了, 跟 HashMap 差不多, 可以参考 HashMap 详解
         if (fh >= 0) {
             binCount = 1;
             for (Node<K,V> e = f;; ++binCount) {
@@ -111,7 +114,7 @@ if (binCount != 0) {
 
 ---
 
-#### 扩容
+#### 是否扩容
 节点插入后会调用 addCount 方法来判断是否需要扩容
 ```java
 private final void addCount(long x, int check) {
@@ -174,7 +177,7 @@ static final int resizeStamp(int n) {
 
 /**
  * 协助扩容方法
- * 经过 addCount 方法, 这个协助扩容就更容易了
+ * 经过 addCount 方法, 这个协助扩容就更容易理解了
  */
 final Node<K,V>[] helpTransfer(Node<K,V>[] tab, Node<K,V> f) {
     Node<K,V>[] nextTab; int sc;
