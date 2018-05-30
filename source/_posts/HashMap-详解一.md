@@ -41,3 +41,8 @@ static final int hash(Object key) {
 ```
 ---
 关于 tableSizeFor 方法留到下一 part 再讲.
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

@@ -23,3 +23,8 @@ public boolean add(E e) {
 
 #### 遍历方式
 Set 的遍历实际就是对内部 map 的 key 进行遍历, 最终都是通过调用 map.keySet().iterator() 方法返回迭代器, 然后对 key 进行遍历. 当然这里面会根据 map 不同遍历结果也不同, 比如 HashSet 内部是用 HashMap 保存, LinkedHashSet 内部是用 LinkedHashMap 保存, TreeSet 内部是用 TreeMap 保存. 因此, HashSet 不会排序, LinkedHashSet 会根据先后插入顺序排序遍历, TreeSet 会根据元素比较排序遍历, 反正最后都是根据 map 来遍历的.
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

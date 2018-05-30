@@ -193,3 +193,8 @@ final Node<K,V> untreeify(HashMap<K,V> map) {
 ```
 
 到这里, HashMap 插入键值对的过程就基本介绍完了, 至于获取键值对就不仔细展开讨论了, 涉及到的遍历都是一样的. 关于删除操作以后有机会再来具体分析.
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

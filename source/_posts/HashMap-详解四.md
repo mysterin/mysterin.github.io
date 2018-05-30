@@ -108,3 +108,8 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 ```
 
 这里用到了关于树的两个方法, 一个给树新增节点的 putTreeVal, 另一个是把链表转换成树结构的 treeifyBin, 这两个方法留到下一 part 讲.
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

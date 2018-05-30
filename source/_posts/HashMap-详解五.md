@@ -350,3 +350,8 @@ static <K,V> void moveRootToFront(Node<K,V>[] tab, TreeNode<K,V> root) {
 6. 新节点是祖父右子树, 并且红父黑叔, 这时如果是位于父节点的左子树, 需要先右旋, 然后统一左旋和修改颜色.
 
 篇幅原因, 关于树的另一个方法 treeifyBin() 就留到下一 part 再来讲.
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

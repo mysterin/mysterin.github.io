@@ -270,3 +270,8 @@ static final int spread(int h) {
     return (h ^ (h >>> 16)) & HASH_BITS;
 }
 ```
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

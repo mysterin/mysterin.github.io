@@ -18,3 +18,8 @@ tags: [LinkedHashMap, 变量]
 表示双向链表的尾部
 3. **final boolean accessOrder**
 true: 表示把最后访问的节点放到双向链表的最后一位, 访问的方式有替换旧节点和读取节点
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

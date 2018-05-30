@@ -66,3 +66,8 @@ n = n + 1 = 0000 0010 0000 0000 = 2 * cap
 ---
 #### tableSizeFor 返回
 关于这个方法的返回直接赋值给 threshold, 而不是乘以加载因子, 这个可以去看 resize 方法, 因为这里开始并没有初始化数组, 所以数组还是空, 当新增元素时就会调用 resize 方法, 里面会把 threshold 作为新的长度大小来初始化数组, 同时`长度 * 加载因子`会赋值给 threshold, 关于 resize 方法具体可以看下一 part.
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---

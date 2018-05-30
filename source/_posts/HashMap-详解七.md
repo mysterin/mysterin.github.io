@@ -114,3 +114,8 @@ abstract class HashIterator {
 ```
 
 以上就是 HashMap 的遍历方法, 它不是按照插入节点的先后顺序进行遍历, 而是按照数组结构来遍历.
+
+---
+**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
+
+---
