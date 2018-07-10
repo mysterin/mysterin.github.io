@@ -218,7 +218,7 @@ protected WebApplicationContext createWebApplicationContext(ApplicationContext p
 ```
 
 #### configureAndRefreshWebApplicationContext
-可以看出在上一 part 也有一个相同名字的方法说明, 其实两个方法的作用是一致的, 都是配置上下文然后执行刷新操作, 也就是创建相关 bean 的操作. 只不过上一 part 的方法是属于 ContextLoader 类, 而这里的方法是属于 FrameworkServlet 类. 他们的区别主要在于刷新操作上, 但是
+可以看出在上一 part 也有一个相同名字的方法说明, 其实两个方法的作用是一致的, 都是配置上下文然后执行刷新操作, 也就是创建相关 bean 的操作. 只不过上一 part 的方法是属于 ContextLoader 类, 而这里的方法是属于 FrameworkServlet 类.
 ```java
 protected void 
     configureAndRefreshWebApplicationContext(ConfigurableWebApplicationContext wac) {
