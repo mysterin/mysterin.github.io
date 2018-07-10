@@ -5,7 +5,8 @@ tags: [TreeMap]
 ---
 
 #### 遍历
-TreeMap 使用中序遍历, 遍历的方式与 HashMap, LinkedHashMap 相同, 通过 entrySet().iterator() 方法返回 Iterator 实例遍历.
+
+TreeMap 使用中序遍历, 遍历的方式与 HashMap, LinkedHashMap 相同, 通过 entrySet().iterator() 方法返回 Iterator 实例遍历.<!-- more -->
 ```java
 public Set<Map.Entry<K,V>> entrySet() {
     EntrySet es = entrySet;
@@ -121,6 +122,4 @@ static <K,V> TreeMap.Entry<K,V> successor(Entry<K,V> t) {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

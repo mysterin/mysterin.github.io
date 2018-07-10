@@ -8,6 +8,8 @@ tags: [List, ArrayList, LinkedList, Vector, Stack]
 
 List 继承于 Collection 继承于 Iterable, 常用实现类有 ArrayList, LinkedList, Vector, Stack, 它们各有不同, 下面会从各方面进行比较.
 
+<!-- more -->
+
 #### 保存元素方式
 ##### ArrayList
 ```java
@@ -269,6 +271,4 @@ public synchronized E pop() {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

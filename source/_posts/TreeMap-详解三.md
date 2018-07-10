@@ -5,6 +5,7 @@ tags: [TreeMap]
 ---
 
 读取节点比较简单, 只是一个遍历过程而已.
+<!-- more -->
 #### get
 ```java
 // 实际调用 getEntry 方法
@@ -64,6 +65,4 @@ final Entry<K,V> getEntryUsingComparator(Object key) {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

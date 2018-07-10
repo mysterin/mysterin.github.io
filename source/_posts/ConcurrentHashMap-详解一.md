@@ -8,8 +8,10 @@ tags: [ConcurrentHashMap]
 
 1. ConcurrentHashMap 实现了线程安全;
 2. 虽然可以通过 Hashtable 或者 Collections.synchronizedMap 来生成一个线程安全的 Map 实例, 但这是全局锁方式, 性能不行;
+<!-- more -->
 3. ConcurrentHashMap 的存储方式和 HashMap 十分类似, 都是用数组 + 链表 + 红黑树的结构, 差别在于一些操作需要做线程同步处理;
 4. 在 JDK7 ConcurrentHashMap 使用 Segment 分段锁的方式实现线程安全, 而在 JDK8 就抛弃这种做法, 采用 CAS 算法来保证线程安全, 这里就不展开讨论分段锁的方式了, 有兴趣可以去找 JDK7 的源码分析.
+
 
 #### 内存模型
 要了解 Java 的线程安全, 首先要知道它的内存模型. 内存模型是一个概念, 简单来讲就是它定义了虚拟机里多线程如何访问变量. 这里涉及到两个概念: 主内存和工作内存. 线程之间的共享变量都是保存在主内存, 每个线程如果想要访问变量, 那么需要先把变量从主内存加载到私有的工作内存, 然后对工作内存的变量进行操作, 最后再更新到主内存中. 注意区分这里的内存模型跟硬件内存不是一码事, 简单理解为主内存和工作内存都可以包含 CPU 寄存器, CPU 缓存, RAM.
@@ -272,6 +274,4 @@ static final int spread(int h) {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

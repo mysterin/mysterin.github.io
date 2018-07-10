@@ -7,6 +7,7 @@ tags: [Hashtable]
 *本文代码来自JDK8*
 
 Hashtable 和 HashMap 十分类似, 它是继承 Dictionary, 这个类已经不推荐使用了. 下面列举几点 Hashtable 与 HashMap 的不同之处.
+<!-- more -->
 1. Hashtable 是线程安全的;
 2. Hashtable 的数组长度可以自定义, 不一定是 2 的幂次方, 默认初始长度是 11;
 3. Hashtable 同样用链表保存, 但不会转换成树结构;
@@ -116,6 +117,4 @@ protected void rehash() {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

@@ -5,6 +5,7 @@ tags: [LinkedHashMap, 遍历]
 ---
 
 LinkedHashMap 的遍历方式和 HashMap 的一样, 都是通过 entrySet 方法返回 Set 实例, 然后通过 iterator 方法返回迭代器进行遍历.
+<!-- more -->
 
 #### entrySet
 ```java
@@ -79,6 +80,4 @@ abstract class LinkedHashIterator {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

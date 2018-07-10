@@ -6,6 +6,7 @@ tags: [LinkedHashMap, put, newNode, afterNodeAccess, afterNodeInsertion]
 
 #### put
 LinkedHashMap 的 put 方法也是使用 HashMap 的方法, 不同在于重写了 newNode(), afterNodeAccess 和 afterNodeInsertion 这几个方法, 这几个方法的调用可以看 *HashMap-详解四*, 下面具体讲讲如何重写这几个方法.
+<!-- more -->
 
 ---
 
@@ -120,6 +121,4 @@ void afterNodeInsertion(boolean evict) { // possibly remove eldest
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

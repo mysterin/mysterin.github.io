@@ -7,6 +7,8 @@ tags: [HashMap, put]
 #### 新增原理
 调用 put() 方法新增 key-value, 实际是调用 putVal() 方法完成. key 为空索引位置是 0, 索引位置相同则通过链表方式保存, 当链表长度超过 8 后转成红黑树保存; 当 key-value 数量超过阈值, 就要将数组 resize.
 
+<!-- more -->
+
 ---
 #### newNode()
 key-value 实际是先构造成 Node 对象, 再进行保存, 如下:
@@ -110,6 +112,4 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 这里用到了关于树的两个方法, 一个给树新增节点的 putTreeVal, 另一个是把链表转换成树结构的 treeifyBin, 这两个方法留到下一 part 讲.
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

@@ -6,6 +6,9 @@ tags: [HashMap, treeifyBin]
 
 #### 链表转树结构
 根据详解四, 当链表长度大于 8 时, 为了更高效的查询, 需要转成红黑树结构, 使用的方法是 treeifyBin. 过程是先把链表结构调整为双向链表结构, 再把双向链表结构调整为红黑树结构.
+
+<!-- more -->
+
 ```java
 /**
  * tab: 数组
@@ -195,6 +198,4 @@ final Node<K,V> untreeify(HashMap<K,V> map) {
 到这里, HashMap 插入键值对的过程就基本介绍完了, 至于获取键值对就不仔细展开讨论了, 涉及到的遍历都是一样的. 关于删除操作以后有机会再来具体分析.
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

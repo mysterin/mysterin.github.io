@@ -5,6 +5,7 @@ tags: [Hashtable]
 ---
 
 #### 遍历
+<!-- more -->
 ```java
 /**
  * 这里是通过 Collections.sysnchronizedSet 方法生成一个线程安全的 Set 实例
@@ -119,6 +120,4 @@ private class Enumerator<T> implements Enumeration<T>, Iterator<T> {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

@@ -8,6 +8,7 @@ tags: [HashMap, 变量]
 #### 实现原理
 1. 建立一个数组
 2. 根据元素哈希值计算数组索引, 保存到数组
+<!-- more -->
 3. 索引号相同的元素通过链表保存
 4. 链表长度超过范围转红黑树保存
 
@@ -43,6 +44,4 @@ static final int hash(Object key) {
 关于 tableSizeFor 方法留到下一 part 再讲.
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

@@ -8,6 +8,7 @@ tags: [HashMap, putTreeVal]
 1. 红黑树是平衡二叉树的一种, 但是它的平衡因子是可以大于 1
 2. 红黑树的节点要么是红色, 要么是黑色, 这里的红黑色只是用来区分的一种方式, 为了定义规则
 3. 根节点一定是黑色
+<!-- more -->
 4. 叶子节点也是黑色, 实际上叶子节点都是由 NULL 组成
 5. 红色节点的子节点是黑色
 6. 根节点到叶子节点的路径都包含相同数量的黑色节点
@@ -352,6 +353,4 @@ static <K,V> void moveRootToFront(Node<K,V>[] tab, TreeNode<K,V> root) {
 篇幅原因, 关于树的另一个方法 treeifyBin() 就留到下一 part 再来讲.
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

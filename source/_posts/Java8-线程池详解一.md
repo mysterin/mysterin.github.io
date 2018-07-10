@@ -8,6 +8,8 @@ tags: [ThreadPoolExecutor]
 
 一般调用线程是通过 Thread 或者 Runable, 这样做就要自己管理线程, 不方便, 所以线程池就出现了. 简单来讲, 线程池保存几个线程, 然后有任务过来了, 就调用线程执行这个任务. 在 JDK 中就默认通过 ThreadPoolExecutor 实现了线程池, 它继承了 AbstractExecutorService 抽象类, 实现了 ExecutorService 和 Executor 接口, 通过 execute 或者 submit 方法提交任务给线程池执行.
 
+<!-- more -->
+
 ---
 
 #### 重入锁 ReentrantLock
@@ -132,6 +134,4 @@ private static boolean isRunning(int c) {
 如果是 true, 核心线程空闲超时时间以 keepAliveTime 为准; 如果是 false, 核心线程是不会超时. 默认 false.
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

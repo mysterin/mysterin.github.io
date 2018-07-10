@@ -6,6 +6,9 @@ tags: [HashMap, 遍历]
 
 #### 使用 Iterator 遍历
 通过 HashMap.entrySet().iterator() 方法获取迭代器, 使用 next 方法对 HashMap 进行遍历.
+
+<!-- more -->
+
 ```java
 HashMap<String, String> map = new HashMap<>();
 Iterator it = map.entrySet().iterator();
@@ -116,6 +119,4 @@ abstract class HashIterator {
 以上就是 HashMap 的遍历方法, 它不是按照插入节点的先后顺序进行遍历, 而是按照数组结构来遍历.
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

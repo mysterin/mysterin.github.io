@@ -6,6 +6,8 @@ tags: [ThreadPoolExecutor]
 
 上一 part 我们了解了线程池的成员变量, 接下来我们来说说如何跑一个线程.
 
+<!-- more -->
+
 #### submit
 submit 既接收 Runable 类型参数也接收 Callable 类型参数, 最终还是构造一个 Runable 参数传递给 execute 方法执行, 区别在于 submit 方法是有返回值的.
 ```java
@@ -408,6 +410,4 @@ private void interruptIdleWorkers(boolean onlyOne) {
 7. 小于核心线程数的线程则继续保留, 等待新的任务到来.
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

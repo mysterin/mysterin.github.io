@@ -4,7 +4,9 @@ date: 2018-05-04 15:26:44
 tags: [ConcurrentHashMap]
 ---
 
-接下来讨论下不同的插入情况
+上一 part 说了如何扩容, 接下来讨论不同情况的插入
+
+<!-- more -->
 
 #### 插入元素到索引位置
 ```java
@@ -46,7 +48,7 @@ if ((fh = f.hash) == MOVED)
  * ForwardingNode 类
  */
 static final class ForwardingNode<K,V> extends Node<K,V> {
-	// 表示扩容后的新数组
+    // 表示扩容后的新数组
     final Node<K,V>[] nextTable;
     ForwardingNode(Node<K,V>[] tab) {
         super(MOVED, null, null, null);
@@ -62,8 +64,8 @@ static final class ForwardingNode<K,V> extends Node<K,V> {
 V oldVal = null;
 // f 是头结点, 先把它锁上, 防止其他线程同时操作这个链表或者树
 synchronized (f) {
-	// 再次判断这个头结点是不是原来的头结点
-	// 这是为了防止在锁上前一刻被其他线程修改了
+    // 再次判断这个头结点是不是原来的头结点
+    // 这是为了防止在锁上前一刻被其他线程修改了
     if (tabAt(tab, i) == f) {
         // hash 值大于等于 0, 说明这是链表, 参考上一 part
         // 然后就是链表节点的插入了, 跟 HashMap 差不多, 可以参考 HashMap 详解
@@ -205,6 +207,4 @@ final Node<K,V>[] helpTransfer(Node<K,V>[] tab, Node<K,V> f) {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

@@ -5,6 +5,7 @@ tags: [TreeMap]
 ---
 
 TreeMap 插入 key-value 同样是用 put 方法
+<!-- more -->
 #### put
 ```java
 public V put(K key, V value) {
@@ -236,6 +237,4 @@ private void rotateRight(Entry<K,V> p) {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

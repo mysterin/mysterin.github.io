@@ -6,6 +6,9 @@ tags: [HashMap, resize]
 
 #### resize 方法
 数组为空或者元素数量超过阈值, 将会执行 `resize()` 方法, 结果是将数组的长度加倍
+
+<!-- more -->
+
 ```java
 final Node<K,V>[] resize() {
     // 设置旧数组, 旧长度, 旧阈值
@@ -177,6 +180,4 @@ if (hiTail != null) {
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*

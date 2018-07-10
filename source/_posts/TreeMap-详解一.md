@@ -8,6 +8,7 @@ tags: [TreeMap]
 
 1. TreeMap 继承于 AbstractMap, 并不是继承 HashMap, 它跟 HashMap 是同级;
 2. TreeMap 直接使用红黑树来保存节点;
+<!-- more -->
 3. 在 HashMap 是使用哈希值来比较大小, TreeMap 则不是, 而是需要 key 实现了 Comparable 接口来互相比较大小;
 4. 如果没有传入自定义比较器, TreeMap 不能使用 null 作为 key.
 
@@ -67,6 +68,4 @@ private static final boolean BLACK = true;
 ```
 
 ---
-**如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨**
-
----
+>*如果有疑问欢迎来 [Issues](https://github.com/mysterin/mysterin.github.io/issues) 探讨*
