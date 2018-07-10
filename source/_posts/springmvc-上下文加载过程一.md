@@ -204,7 +204,9 @@ protected void configureAndRefreshWebApplicationContext(
         if (configLocationParam != null) {
             wac.setId(configLocationParam);
         } else {
-            wac.setId(ConfigurableWebApplicationContext.APPLICATION_CONTEXT_ID_PREFIX + ObjectUtils.getDisplayString(sc.getContextPath()));
+            wac.setId(
+                ConfigurableWebApplicationContext.APPLICATION_CONTEXT_ID_PREFIX + 
+                ObjectUtils.getDisplayString(sc.getContextPath()));
         }
     }
 

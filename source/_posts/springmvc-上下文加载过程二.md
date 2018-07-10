@@ -139,6 +139,8 @@ protected WebApplicationContext initWebApplicationContext() {
         this.onRefresh(wac);
     }
 
+    // 这里同样把子上下文保存到 ServletContext 中
+    // 因此可以通过 ServletContext 获取父子上下文的实例
     if (this.publishContext) {
         String attrName = this.getServletContextAttributeName();
         this.getServletContext().setAttribute(attrName, wac);
