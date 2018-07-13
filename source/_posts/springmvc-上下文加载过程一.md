@@ -4,6 +4,8 @@ date: 2018-07-06 10:58:48
 tags: [spring, springmvc, context]
 ---
 
+*本文代码来自 spring-4.0.3.RELEASE*
+
 #### 上下文
 spring 的根本是 IOC 和 AOP, 这两个点这里不展开讨论, 只需要知道 spring 是依靠容器来管理 bean, 从而实现 IOC 和 AOP 功能, 而这里的 spring 容器则是指上下文 Context. Context 实现了工厂接口, 所以可以通过 Context 直接获取被 spring 实例化的 bean.<!-- more --> 一般来说 spring 实例化 bean 有两种方式, 一种是用注解比如 `@Controller`, `@Service`, `@Repository` 等, 设置 spring 的扫描范围内有这些注解的类就会被实例化, 加入到上下文 Context 中; 另一种是在配置文件用 `<bean/>` 标签配置, 效果是一样的.
 

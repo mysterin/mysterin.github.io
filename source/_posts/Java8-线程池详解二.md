@@ -51,8 +51,10 @@ public void execute(Runnable command) {
 
     // 这里把任务加入到任务队列
     // 再次检查线程池状态, 这是为了防止其他线程修改了状态
-    // 不是 RUNNING 状态, 就会执行拒绝策略
-    // 如果还是 RUNNING 状态, 但是线程数为 0, 需要从任务队列中取任务执行
+    // 如果不是 RUNNING 状态, 就会执行拒绝策略
+    // 如果还是 RUNNING 状态, 但是加入任务队列前线程都跑完退出了
+    // 也就是说在上面的判断到加入任务队列线程数突然从大于核心线程数变成 0 
+    // 那么需要新建线程从任务队列中取任务执行
     // addWorker(null, false) 就是读任务队列执行
     if (isRunning(c) && workQueue.offer(command)) {
         int recheck = ctl.get();
@@ -71,6 +73,7 @@ public void execute(Runnable command) {
 ```
 
 #### addWorker
+要注意这个方法会为每一个传递过来的任务创建一个线程, 也就是说就算线程数量超过最大线程数了这个方法依然会创建新线程. 而线程数的限制其实是在上面说到的 execute 方法里面的, execute 方法设置了只有两个条件才会调用 addWorker 方法, 一个是线程数小于核心线程数, 另一个则是任务队列已经满了需要创建新线程才会调用 addWorker 方法.
 ```java
 /**
  * firstTask 表示要添加的任务
@@ -147,6 +150,7 @@ private boolean addWorker(Runnable firstTask, boolean core) {
                     if (t.isAlive()) // precheck that t is startable
                         throw new IllegalThreadStateException();
                     // 把这个新线程加入到线程池中
+                    // workers 是一个 set, 用来保存创建出来的线程, 也就是所谓的线程池
                     workers.add(w);
                     int s = workers.size();
                     if (s > largestPoolSize)
@@ -210,6 +214,7 @@ private final class Worker
 ```
 
 #### runWorker
+这个方法是外部类 ThreadPoolExecutor 的方法.
 ```java
 final void runWorker(Worker w) {
     Thread wt = Thread.currentThread();
