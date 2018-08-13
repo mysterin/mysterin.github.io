@@ -135,6 +135,10 @@ protected WebApplicationContext initWebApplicationContext() {
         wac = this.createWebApplicationContext(rootContext);
     }
 
+    // 到这里子上下文初始化完成, bean 也被实例化
+    // 接下来就可以用这些 bean 初始化 web 组件了
+    // 比如视图解析器, 文件上传解析器, 异常处理解析器等等
+    // 这里就不展开讨论了
     if (!this.refreshEventReceived) {
         this.onRefresh(wac);
     }
