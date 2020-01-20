@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="qR51yNGuWXWI6noqkPDYLxp4ytLyHPxw_YN7_PzLn8Y">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ThreadPoolExecutor,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文代码来自 JDK8 一般调用线程是通过 Thread 或者 Runable, 这样做就要自己管理线程, 不方便, 所以线程池就出现了. 简单来讲, 线程池保存几个线程, 然后有任务过来了, 就调用线程执行这个任务. 在 JDK 中就默认通过 ThreadPoolExecutor 实现了线程池, 它继承了 AbstractExecutorService 抽象类, 实现了 ExecutorServ">
+<meta name="keywords" content="ThreadPoolExecutor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8 线程池详解一">
+<meta property="og:url" content="http://yoursite.com/2018/05/24/Java8-线程池详解一/index.html">
+<meta property="og:site_name" content="mysterin&#39;s Notes">
+<meta property="og:description" content="本文代码来自 JDK8 一般调用线程是通过 Thread 或者 Runable, 这样做就要自己管理线程, 不方便, 所以线程池就出现了. 简单来讲, 线程池保存几个线程, 然后有任务过来了, 就调用线程执行这个任务. 在 JDK 中就默认通过 ThreadPoolExecutor 实现了线程池, 它继承了 AbstractExecutorService 抽象类, 实现了 ExecutorServ">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-20T09:21:08.940Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java8 线程池详解一">
+<meta name="twitter:description" content="本文代码来自 JDK8 一般调用线程是通过 Thread 或者 Runable, 这样做就要自己管理线程, 不方便, 所以线程池就出现了. 简单来讲, 线程池保存几个线程, 然后有任务过来了, 就调用线程执行这个任务. 在 JDK 中就默认通过 ThreadPoolExecutor 实现了线程池, 它继承了 AbstractExecutorService 抽象类, 实现了 ExecutorServ">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/24/Java8-线程池详解一/">
+
+
+
+
+
+  <title>Java8 线程池详解一 | mysterin's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mysterin's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NO CODE, NO MORE</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/24/Java8-线程池详解一/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mysterin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mysterin's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java8 线程池详解一</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-24T15:24:37+08:00">
+                2018-05-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><em>本文代码来自 JDK8</em></p>
+<p>一般调用线程是通过 Thread 或者 Runable, 这样做就要自己管理线程, 不方便, 所以线程池就出现了. 简单来讲, 线程池保存几个线程, 然后有任务过来了, 就调用线程执行这个任务. 在 JDK 中就默认通过 ThreadPoolExecutor 实现了线程池, 它继承了 AbstractExecutorService 抽象类, 实现了 ExecutorService 和 Executor 接口, 通过 execute 或者 submit 方法提交任务给线程池执行.</p>
+<a id="more"></a>
+<hr>
+<h4 id="重入锁-ReentrantLock"><a href="#重入锁-ReentrantLock" class="headerlink" title="重入锁 ReentrantLock"></a>重入锁 ReentrantLock</h4><p>在开始讲解线程池之前, 我们需要了解重入锁, 这里只是简单说明, 需要深入了解的同学可以找资料研究.<br>所谓重入锁, 是指一个线程可以对同一个资源重复加锁, 为什么要这样定义? 因为比如方法 1 用了锁, 方法 2 也用了锁, 当方法 1 调用方法 2 时, 如果不允许重入锁, 那么就造成死锁了, 所以才需要锁能重入. 当然加多少次锁就要释放多少次锁. 为了保证一定能释放锁, 释放锁的操作一定要放到 finally 块中.<br>ReentrantLock 实现的原理是 AbstractQueuedSynchronizer, 队列同步器, 简称 AQS, 基础也是基于 CAS 算法.<br>ReentrantLock 用 state 表示是否加锁, 0 表示没有锁, 当前线程可以持有锁, 1 表示有其他线程持有锁, 那么需要把当前线程加入到同步队列等待(这里实际是用双向链表表示队列). 重复加锁会让 state 加一, 至于这里对 state 变量操作, 当然是用 CAS 算法操作, 这样才能保证只有一个线程可以修改成功, 也就只有一个线程可以持有锁.<br>下面简单说下获取锁的过程:</p>
+<ol>
+<li>调用 ReentrantLock 的 lock() 方法;</li>
+<li>该方法通过 CAS 算法把 state 从 0 更新为 1, 成功就说明没有其他线程持有锁, 本线程就持有锁了, 同时会用一个变量保存这个持有锁的线程;</li>
+<li>更新失败就判断本线程是否持有锁的线程, 是的话就把 state 加 1, 然后就可以开心地跑任务了;</li>
+<li>前面的判断都不是那就只能把本线程加入到同步队列中了;</li>
+<li>接下来用一个死循环让线程不断轮询, 对于同步队列的线程就阻塞(实际是调用 LockSupport.park() 方法阻塞, 具体怎么阻塞就不讨论了), 等待释放锁后的唤醒, 然后同步队列的下一个线程才能获取锁执行, 其他线程还是在等待中.</li>
+</ol>
+<p>接着再说说释放锁的过程:</p>
+<ol>
+<li>调用 ReentrantLock 的 unlock() 方法;</li>
+<li>然后会让 state 减一, 注意这里不必用 CAS 算法更新 state 的值, 因为前面的加锁操作已经决定了只有一个线程可以持有锁, 那么释放锁的操作肯定也只有一个线程在执行了, 所以不必用 CAS 保证原子操作;</li>
+<li>如果 state 为 0, 说明锁全部释放了, 需要把之前保存持有锁线程的变量设置为空, 然后把同步队列的后继线程唤醒.</li>
+</ol>
+<p>以上就是 AQS 的大概实现原理, 在这里我们只需要理解可以通过 ReentrantLock.lock() 获取锁, 通过 ReentrantLock.unlock() 释放锁就行, 以后有机会再来详细探讨吧.</p>
+<hr>
+<h4 id="线程中断-interrupt"><a href="#线程中断-interrupt" class="headerlink" title="线程中断 interrupt"></a>线程中断 interrupt</h4><p>除了要了解重入锁, 我们还需要懂得线程中断的一些知识, 这里也简单介绍中断, 并不会详细说明, 喜欢深入研究的同学可以找相关资料研究. 主要介绍的是 Thread 类的三个中断方法:</p>
+<ol>
+<li><code>public void interrupt()</code><br>这个就是产生线程中断的方法, 但并不是说调用这个方法就能让线程停止了, Java 中是不会允许直接停止一个线程的, 毕竟说不定线程打开了其他资源, 如果直接停止那么这些资源就没有关闭了, 很危险的操作.<br>这个方法实际是产生一个中断标志, 用来表示调用者希望这个线程能够中断, 这时如果线程是处于阻塞, 那么线程就抛出一个中断异常, 同时把这个中断标识清除.<br>因此我们真正要处理的是判断是否有这个中断标识, 有的话就可以做一些操作, 比如不再执行下去; 或者捕捉是否有中断异常, 有的话也可以做一些收尾操作等等, 具体要做什么都是自己决定的.  那么异常捕捉就不用说啦, 我们又是怎么判断是否有中断异常呢? Thread 类提供了两个方法来判断.</li>
+<li><code>public static boolean interrupted()</code><br>这是个静态方法, 用来判断当前线程是否有中断标识, 如果有就返回 true, 而且同时会把中断标识清除, 这也意味着如果通过 interrupt() 方法产生中断标识, 然后连续执行 interrupted() 方法, 第一次返回 true, 之后的都是返回 false.</li>
+<li><code>public boolean isInterrupted()</code><br>这是个成员方法, 需要通过 Thread 的实例调用, 也是用来判断线程是否有中断标识, 有就返回 true, 不过它跟 interrupted() 方法不同, 它不会把中断标识清除. 因此如果有中断标识, 连续执行 isInterrupted() 都是会返回 true. </li>
+</ol>
+<hr>
+<h4 id="状态和线程数变量"><a href="#状态和线程数变量" class="headerlink" title="状态和线程数变量"></a>状态和线程数变量</h4><ol>
+<li><code>private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));</code><br>状态计数器, 又是典型的一个变量多种使用, AtomicInteger 是使用 CAS 算法的线程安全类, 一个整型有 32 位, 其中高 3 位用来表示线程池的状态, 低 29 位用来表示线程数.</li>
+<li><code>private static final int COUNT_BITS = Integer.SIZE - 3;</code><br>线程数比特位数, 值为 29, 表示线程数量最多为 2^29-1. 至于为什么是 32-3, 这是因为要用 3 位比特位表示线程池的状态, 线程池的状态有 5 个, 3个比特位足够表示了.</li>
+<li><code>private static final int CAPACITY   = (1 &lt;&lt; COUNT_BITS) - 1;</code><br>用来与运算得出线程池的线程数量以及线程池的状态, 值是: 0001 1111 1111 1111 1111 1111 1111 1111.</li>
+<li><p>状态值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> RUNNING    = -<span class="number">1</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SHUTDOWN   =  <span class="number">0</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> STOP       =  <span class="number">1</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TIDYING    =  <span class="number">2</span> &lt;&lt; COUNT_BITS;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TERMINATED =  <span class="number">3</span> &lt;&lt; COUNT_BITS;</span><br></pre></td></tr></table></figure>
+<p> 这里统一左移 29 位, 目的是为了方便 ctl 通过逻辑运算计算状态值, 注意这些状态是按从小到大排序.<br> <strong>RUNNING</strong>: 运行状态, 表示正在处理任务和接收任务.<br> <strong>SHUTDOWN</strong>: 关闭状态, 表示不接收新任务, 但会继续处理队列的任务. 通过 shutdown() 方法可以进入这个状态.<br> <strong>STOP</strong>: 停止状态, 表示不接收新任务, 也不处理队列的任务, 而且还要中断正在执行的任务. 按照上面介绍的中断, 这里的中断任务也不是真的中断, 具体还是看任务是不是阻塞, 如果是阻塞那么就会抛出中断异常停止执行了, 如果没有阻塞那么还要看任务代码里面有没有对中断状态处理, 如果没有任务也还是会执行下去的. 通过 shutdownNow() 方法可以进入这个状态.<br> <strong>TIDYING</strong>: 整理状态, 表示所有任务执行完成.<br> <strong>TERMINATED</strong>: 结束状态, 表示线程池全部结束.</p>
+</li>
+</ol>
+<h4 id="操作状态和线程数的方法"><a href="#操作状态和线程数的方法" class="headerlink" title="操作状态和线程数的方法"></a>操作状态和线程数的方法</h4><ol>
+<li><p>计算状态值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// c 表示 ctl 的值</span></span><br><span class="line"><span class="comment">// 跟非 CAPACITY 与运算, 实际是得到 ctl 高 3 位的值, 很方便和状态值比较</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">runStateOf</span><span class="params">(<span class="keyword">int</span> c)</span>     </span>&#123; <span class="keyword">return</span> c &amp; ~CAPACITY; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算线程数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// c 表示 ctl 的值</span></span><br><span class="line"><span class="comment">// 跟 CAPACITY 与运算, 实际是得到 ctl 低 29 位的值, 也就是线程数</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">workerCountOf</span><span class="params">(<span class="keyword">int</span> c)</span>  </span>&#123; <span class="keyword">return</span> c &amp; CAPACITY; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算状态计数器 ctl 的值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// rs 表示状态值, wc 表示线程数</span></span><br><span class="line"><span class="comment">// 两者或运算直接得出 ctl 的值</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">ctlOf</span><span class="params">(<span class="keyword">int</span> rs, <span class="keyword">int</span> wc)</span> </span>&#123; <span class="keyword">return</span> rs | wc; &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算当前状态是否小于某个状态</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里 c 表示 ctl</span></span><br><span class="line"><span class="comment">// 因为状态值从小到大排序, 可以这样比较</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">runStateLessThan</span><span class="params">(<span class="keyword">int</span> c, <span class="keyword">int</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c &lt; s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>计算当前状态是否大于等于某个状态</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里 c 表示 ctl</span></span><br><span class="line"><span class="comment">// 因为状态值从小到大排序, 可以这样比较</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">runStateAtLeast</span><span class="params">(<span class="keyword">int</span> c, <span class="keyword">int</span> s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c &gt;= s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>判断是否运行状态</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里 c 表示 ctl</span></span><br><span class="line"><span class="comment">// 因为状态值从小到大排序, 可以这样比较</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isRunning</span><span class="params">(<span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c &lt; SHUTDOWN;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h4 id="任务执行涉及的成员变量"><a href="#任务执行涉及的成员变量" class="headerlink" title="任务执行涉及的成员变量"></a>任务执行涉及的成员变量</h4><ol>
+<li><code>private volatile int corePoolSize;</code><br>核心线程数, 线程池最小线程数量. 任务多时会新建临时线程执行, 任务少时会回落到核心线程数. 当没有任务时, 临时线程等待超时就会结束, 核心线程会一直等待, 直到有任务来执行.</li>
+<li><code>private final BlockingQueue&lt;Runnable&gt; workQueue;</code><br>任务队列, 任务多时会把新任务放到队列等待, 队列满了才会新建临时线程执行, 如果临时线程也满了就执行拒绝策略, 拒绝策略有几种, 以后会说. 注意这个队列允许 poll() 返回 null, 所以需要根据 isEmpty() 判断是否空.</li>
+<li><code>private volatile int maximumPoolSize;</code><br>最大线程数, 核心线程数 + 临时线程数不能超过这个值.</li>
+<li><code>private final ReentrantLock mainLock = new ReentrantLock();</code><br>线程池主锁, 用来线程池内部的一些同步操作.</li>
+<li><code>private volatile RejectedExecutionHandler handler;</code><br>拒绝策略处理器, 可以自定义, 默认是抛出异常.</li>
+<li><code>private volatile long keepAliveTime;</code><br>临时线程空闲超时时间, 超过这个时间就会结束.</li>
+<li><code>private final HashSet&lt;Worker&gt; workers = new HashSet&lt;Worker&gt;();</code><br>保存线程的集合, 也就是线程池. Worker 是一个封装了任务及执行这个任务的线程的类, 可以把 Worker 看成一个线程. 因为 HashSet 不是线程安全的, 所以对它的操作需要持有锁才行.</li>
+<li><code>private volatile boolean allowCoreThreadTimeOut;</code><br>如果是 true, 核心线程空闲超时时间以 keepAliveTime 为准; 如果是 false, 核心线程是不会超时. 默认 false.</li>
+</ol>
+<hr>
+<blockquote>
+<p><em>如果有疑问欢迎来 <a href="https://github.com/mysterin/mysterin.github.io/issues" target="_blank" rel="noopener">Issues</a> 探讨</em></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ThreadPoolExecutor/" rel="tag"># ThreadPoolExecutor</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/15/Set-实现类介绍/" rel="next" title="Set 实现类介绍">
+                <i class="fa fa-chevron-left"></i> Set 实现类介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/28/Java8-线程池详解二/" rel="prev" title="Java8 线程池详解二">
+                Java8 线程池详解二 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mysterin</p>
+              <p class="site-description motion-element" itemprop="description">mysterin</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#重入锁-ReentrantLock"><span class="nav-number">1.</span> <span class="nav-text">重入锁 ReentrantLock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程中断-interrupt"><span class="nav-number">2.</span> <span class="nav-text">线程中断 interrupt</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#状态和线程数变量"><span class="nav-number">3.</span> <span class="nav-text">状态和线程数变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作状态和线程数的方法"><span class="nav-number">4.</span> <span class="nav-text">操作状态和线程数的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#任务执行涉及的成员变量"><span class="nav-number">5.</span> <span class="nav-text">任务执行涉及的成员变量</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mysterin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

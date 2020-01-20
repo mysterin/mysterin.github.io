@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="qR51yNGuWXWI6noqkPDYLxp4ytLyHPxw_YN7_PzLn8Y">
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="HashMap,putTreeVal,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="红黑树性质 红黑树是平衡二叉树的一种, 但是它的平衡因子是可以大于 1 红黑树的节点要么是红色, 要么是黑色, 这里的红黑色只是用来区分的一种方式, 为了定义规则 根节点一定是黑色">
+<meta name="keywords" content="HashMap,putTreeVal">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashMap 详解五">
+<meta property="og:url" content="http://yoursite.com/2018/03/15/HashMap-详解五/index.html">
+<meta property="og:site_name" content="mysterin&#39;s Notes">
+<meta property="og:description" content="红黑树性质 红黑树是平衡二叉树的一种, 但是它的平衡因子是可以大于 1 红黑树的节点要么是红色, 要么是黑色, 这里的红黑色只是用来区分的一种方式, 为了定义规则 根节点一定是黑色">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/8878827e6fbf89f622e2f4e30f170bb.png">
+<meta property="og:image" content="http://yoursite.com/images/e13296c0ec0cfc5bcc3a0c2b740e215.png">
+<meta property="og:image" content="http://yoursite.com/images/43f8996fd9b5397f1ba347668ce9c2c.png">
+<meta property="og:image" content="http://yoursite.com/images/d3224c64533e5ac9070766bbe31d5bd.png">
+<meta property="og:image" content="http://yoursite.com/images/bb5b97203412e3c998024f000d42329.png">
+<meta property="og:image" content="http://yoursite.com/images/9bba7fdbaef1c9be07942243215f2fc.png">
+<meta property="og:image" content="http://yoursite.com/images/6e7829e2a63e03b1b7616047edcbdb0.png">
+<meta property="og:image" content="http://yoursite.com/images/38be88d5ff0360ec7ccd767ce3ac210.png">
+<meta property="og:image" content="http://yoursite.com/images/e4373553944140cf3a3b0bb376eb916.png">
+<meta property="og:image" content="http://yoursite.com/images/c0aa3d044eb4fcb1fa1bc545b9487d5.png">
+<meta property="og:image" content="http://yoursite.com/images/563e27d71b3de6b196a8ca746748f93.png">
+<meta property="og:image" content="http://yoursite.com/images/9b6d50b3e760a6ff2503d5172137582.png">
+<meta property="og:updated_time" content="2020-01-20T09:21:08.937Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HashMap 详解五">
+<meta name="twitter:description" content="红黑树性质 红黑树是平衡二叉树的一种, 但是它的平衡因子是可以大于 1 红黑树的节点要么是红色, 要么是黑色, 这里的红黑色只是用来区分的一种方式, 为了定义规则 根节点一定是黑色">
+<meta name="twitter:image" content="http://yoursite.com/images/8878827e6fbf89f622e2f4e30f170bb.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/15/HashMap-详解五/">
+
+
+
+
+
+  <title>HashMap 详解五 | mysterin's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">mysterin's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NO CODE, NO MORE</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/HashMap-详解五/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="mysterin">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="mysterin's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">HashMap 详解五</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T14:16:48+08:00">
+                2018-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="红黑树性质"><a href="#红黑树性质" class="headerlink" title="红黑树性质"></a>红黑树性质</h4><ol>
+<li>红黑树是平衡二叉树的一种, 但是它的平衡因子是可以大于 1</li>
+<li>红黑树的节点要么是红色, 要么是黑色, 这里的红黑色只是用来区分的一种方式, 为了定义规则</li>
+<li>根节点一定是黑色<a id="more"></a></li>
+<li>叶子节点也是黑色, 实际上叶子节点都是由 NULL 组成</li>
+<li>红色节点的子节点是黑色</li>
+<li>根节点到叶子节点的路径都包含相同数量的黑色节点</li>
+</ol>
+<h4 id="红黑树与-AVL-树的区别"><a href="#红黑树与-AVL-树的区别" class="headerlink" title="红黑树与 AVL 树的区别"></a>红黑树与 AVL 树的区别</h4><p>红黑树在线模拟链接: <a href="https://www.cs.usfca.edu/~galles/visualization/RedBlack.html" target="_blank" rel="noopener">https://www.cs.usfca.edu/~galles/visualization/RedBlack.html</a><br>AVL 树在线模拟链接: <a href="https://www.cs.usfca.edu/~galles/visualization/AVLtree.html" target="_blank" rel="noopener">https://www.cs.usfca.edu/~galles/visualization/AVLtree.html</a><br>依次插入: 1, 2, 3, 4, 5, 6, 红黑树会出现左右子树高度差大于 1 的情况, AVL 树就不会, 平衡因子不会超过 1, 最终结果如下:<br><strong>红黑树:</strong><br><img src="/images/8878827e6fbf89f622e2f4e30f170bb.png" alt><br><strong>AVL 树:</strong><br><img src="/images/e13296c0ec0cfc5bcc3a0c2b740e215.png" alt></p>
+<h4 id="红黑树插入"><a href="#红黑树插入" class="headerlink" title="红黑树插入"></a>红黑树插入</h4><ol>
+<li>节点只有红黑两种颜色, 假设插入节点是黑色, 那么会导致这条路径的黑色节点比其他路径要长, 违反性质 6, 所以新节点要为红色;</li>
+<li>如果是根节点, 变成黑色, 接下来的操作分两种情况, 一种是父节点是黑色, 简称黑父; 另一种父节点是红色, 简称红父;</li>
+<li>黑父, 插入红节点满足性质, 什么都不用做;</li>
+<li>红父, 这个情况又要分为两种情况, 一是红叔, 一是黑叔;<br> 1) 红叔<br> 将父叔节点变成黑色, 为了不违反性质 6, 祖父节点就变成红色; 当祖父节点变成红色, 相当于插入一个新节点到祖父节点的位置, 这时候需要继续向上迭代, 重新走插入流程<br> 2) 黑叔<br> 这个情况就复杂多了, 不仅要改变节点颜色, 还要进行旋转, 具体可以分为 4 种情况:<br> a. 新节点位于祖父节点的左孩子的左子树, 先右旋, 父节点变成黑色, 祖父节点变成红色 <div class="group-picture"><div class="group-picture-container"><div class="group-picture-row"><div class="group-picture-column" style="width: 50%;"><img src="/images/43f8996fd9b5397f1ba347668ce9c2c.png" alt></div><div class="group-picture-column" style="width: 50%;"><img src="/images/d3224c64533e5ac9070766bbe31d5bd.png" alt></div></div><div class="group-picture-row"></div></div></div>
+ b. 新节点位于祖父节点的左孩子的右子树, 先左旋再右旋, 新节点变成黑色, 祖父节点变成红色 <div class="group-picture"><div class="group-picture-container"><div class="group-picture-row"><div class="group-picture-column" style="width: 33.333333333333336%;"><img src="/images/bb5b97203412e3c998024f000d42329.png" alt></div><div class="group-picture-column" style="width: 33.333333333333336%;"><img src="/images/9bba7fdbaef1c9be07942243215f2fc.png" alt></div><div class="group-picture-column" style="width: 33.333333333333336%;"><img src="/images/6e7829e2a63e03b1b7616047edcbdb0.png" alt></div></div><div class="group-picture-row"></div></div></div>
+ c. 新节点位于祖父节点的右孩子的右子树, 先左旋, 父节点变成黑色, 祖父节点变成红色 <div class="group-picture"><div class="group-picture-container"><div class="group-picture-row"><div class="group-picture-column" style="width: 50%;"><img src="/images/38be88d5ff0360ec7ccd767ce3ac210.png" alt></div><div class="group-picture-column" style="width: 50%;"><img src="/images/e4373553944140cf3a3b0bb376eb916.png" alt></div></div><div class="group-picture-row"></div></div></div>
+ d. 新节点位于祖父节点的右孩子的左子树, 先右旋再左旋, 新节点变成黑色, 祖父节点变成红色 <div class="group-picture"><div class="group-picture-container"><div class="group-picture-row"><div class="group-picture-column" style="width: 33.333333333333336%;"><img src="/images/c0aa3d044eb4fcb1fa1bc545b9487d5.png" alt></div><div class="group-picture-column" style="width: 33.333333333333336%;"><img src="/images/563e27d71b3de6b196a8ca746748f93.png" alt></div><div class="group-picture-column" style="width: 33.333333333333336%;"><img src="/images/9b6d50b3e760a6ff2503d5172137582.png" alt></div></div><div class="group-picture-row"></div></div></div>
+</li>
+</ol>
+<hr>
+<h4 id="putTreeVal"><a href="#putTreeVal" class="headerlink" title="putTreeVal()"></a>putTreeVal()</h4><p>HashMap 中如果是树结构, 那么使用的是红黑树结构, 因为查询的时间复杂度都是 O(logN), 而保存键值对是通过 putTreeVal 方法, 这里可以看上一 part. 这个方法并不是 HashMap 的方法, 而是 HashMap 的内部类 TreeNode 的方法, 这个内部类用来表示树节点, 包含几个属性: parent, left, right, prev, next, red.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 返回树的根节点</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> TreeNode&lt;K,V&gt; <span class="title">root</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (TreeNode&lt;K,V&gt; r = <span class="keyword">this</span>, p;;) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((p = r.parent) == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> r;</span><br><span class="line">        r = p;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 如果树存在相同 key 的节点, 那么会直接返回这个节点; 如果没有就插入新节点</span></span><br><span class="line"><span class="comment"> * map: 表示 HashMap 本身</span></span><br><span class="line"><span class="comment"> * tab: 表示数组</span></span><br><span class="line"><span class="comment"> * h: 表示 key 的哈希值</span></span><br><span class="line"><span class="comment"> * k: 表示 key</span></span><br><span class="line"><span class="comment"> * v: 表示 value</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">final</span> TreeNode&lt;K,V&gt; <span class="title">putTreeVal</span><span class="params">(HashMap&lt;K,V&gt; map, Node&lt;K,V&gt;[] tab,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       <span class="keyword">int</span> h, K k, V v)</span> </span>&#123;</span><br><span class="line">    Class&lt;?&gt; kc = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">boolean</span> searched = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取根节点</span></span><br><span class="line">    TreeNode&lt;K,V&gt; root = (parent != <span class="keyword">null</span>) ? root() : <span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历树, p 表示当前节点</span></span><br><span class="line">    <span class="keyword">for</span> (TreeNode&lt;K,V&gt; p = root;;) &#123;</span><br><span class="line"></span><br><span class="line">    	<span class="comment">// dir: -1 表示向左遍历, 1 表示向右遍历</span></span><br><span class="line">    	<span class="comment">// ph: 表示当前节点的 key 的哈希值</span></span><br><span class="line">    	<span class="comment">// pk: 表示当前节点的 key</span></span><br><span class="line">        <span class="keyword">int</span> dir, ph; K pk;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新节点的哈希值小于当前节点, 向左遍历, dir 设置为 -1</span></span><br><span class="line">        <span class="keyword">if</span> ((ph = p.hash) &gt; h)</span><br><span class="line">            dir = -<span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 新节点的哈希值大于当前节点, 向右遍历, dir 设置为 1</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (ph &lt; h)</span><br><span class="line">            dir = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 新节点的 key 和当前节点相同, 直接返回当前节点</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ((pk = p.key) == k || (k != <span class="keyword">null</span> &amp;&amp; k.equals(pk)))</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        <span class="comment">// 新节点的哈希值和当前节点的哈希值相同, 但是 key 不相同</span></span><br><span class="line">        <span class="comment">// comparableClassFor 方法会返回实现 Comparable 接口的类型, 否则返回空</span></span><br><span class="line">        <span class="comment">// compareComparables 方法会返回 k 与 pk 比较后的值</span></span><br><span class="line">        <span class="comment">// 也就是说这里是处理当前节点没有实现 Comparable 接口</span></span><br><span class="line">        <span class="comment">// 或者新节点通过 Comparable 接口比较后还是相等的情况</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ((kc == <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                  (kc = comparableClassFor(k)) == <span class="keyword">null</span>) ||</span><br><span class="line">                 (dir = compareComparables(kc, k, pk)) == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// 当前节点的左右子树可能也相同, 所以向下搜索符合哈希值和 key 的节点 </span></span><br><span class="line">            <span class="keyword">if</span> (!searched) &#123;</span><br><span class="line">                TreeNode&lt;K,V&gt; q, ch;</span><br><span class="line">                searched = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">if</span> (((ch = p.left) != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                     (q = ch.find(h, k, kc)) != <span class="keyword">null</span>) ||</span><br><span class="line">                    ((ch = p.right) != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                     (q = ch.find(h, k, kc)) != <span class="keyword">null</span>))</span><br><span class="line">                    <span class="keyword">return</span> q;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 比较哈希值, 小于等于返回 -1, 大于返回 1</span></span><br><span class="line">            dir = tieBreakOrder(k, pk);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 记录当前节点</span></span><br><span class="line">        TreeNode&lt;K,V&gt; xp = p;</span><br><span class="line">        <span class="comment">// 根据 dir 判断左遍历还是右遍历, 子节点为空说明来到了叶子节点, 把新节点插入就可以了</span></span><br><span class="line">        <span class="keyword">if</span> ((p = (dir &lt;= <span class="number">0</span>) ? p.left : p.right) == <span class="keyword">null</span>) &#123;</span><br><span class="line">            Node&lt;K,V&gt; xpn = xp.next;</span><br><span class="line">            <span class="comment">// 新节点, next 指向父节点的 next</span></span><br><span class="line">            TreeNode&lt;K,V&gt; x = map.newTreeNode(h, k, v, xpn);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 根据 dir 决定是插入到左子树还是右子树</span></span><br><span class="line">            <span class="keyword">if</span> (dir &lt;= <span class="number">0</span>)</span><br><span class="line">                xp.left = x;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                xp.right = x;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 这里设置父子双向链表关系, 把父节点原来的 next 节点的 prev 指向新节点</span></span><br><span class="line">            xp.next = x;</span><br><span class="line">            x.parent = x.prev = xp;</span><br><span class="line">            <span class="keyword">if</span> (xpn != <span class="keyword">null</span>)</span><br><span class="line">                ((TreeNode&lt;K,V&gt;)xpn).prev = x;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// balanceInsertion() 方法将树修改成符合红黑树性质</span></span><br><span class="line">            <span class="comment">// 树旋转后可能会根节点转掉, 那么数组索引位置对应节点就不是根节点了</span></span><br><span class="line">            <span class="comment">// moveRootToFront() 方法确保索引位置对应根节点</span></span><br><span class="line">            moveRootToFront(tab, balanceInsertion(root, x));</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h4 id="balanceInsertion"><a href="#balanceInsertion" class="headerlink" title="balanceInsertion()"></a>balanceInsertion()</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * root: 根节点</span></span><br><span class="line"><span class="comment"> * x: 新节点</span></span><br><span class="line"><span class="comment"> * 这个方法是把树改成符合红黑树性质的过程, 可以结合上面红黑树插入来看</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> &lt;K,V&gt; <span class="function">TreeNode&lt;K,V&gt; <span class="title">balanceInsertion</span><span class="params">(TreeNode&lt;K,V&gt; root,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                    TreeNode&lt;K,V&gt; x)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 设置新节点为红色</span></span><br><span class="line">    x.red = <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// xp: 父节点</span></span><br><span class="line">    <span class="comment">// xpp: 祖父节点</span></span><br><span class="line">    <span class="comment">// xppl: 祖父节点左孩子</span></span><br><span class="line">    <span class="comment">// xppr: 祖父节点右孩子</span></span><br><span class="line">    <span class="keyword">for</span> (TreeNode&lt;K,V&gt; xp, xpp, xppl, xppr;;) &#123;</span><br><span class="line">    	<span class="comment">// 父节点为空, 说明这是根节点, 设置成黑色</span></span><br><span class="line">        <span class="keyword">if</span> ((xp = x.parent) == <span class="keyword">null</span>) &#123;</span><br><span class="line">            x.red = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">return</span> x;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 黑父, 什么都不做, 至于还要判断祖父节点是否为空就不知道为什么了</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!xp.red || (xpp = xp.parent) == <span class="keyword">null</span>)</span><br><span class="line">            <span class="keyword">return</span> root;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 红父, 并且该节点位于祖父节点的左子树</span></span><br><span class="line">        <span class="keyword">if</span> (xp == (xppl = xpp.left)) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 红叔, 只要修改颜色即可</span></span><br><span class="line">            <span class="comment">// 红叔变黑叔</span></span><br><span class="line">            <span class="comment">// 红父变黑父</span></span><br><span class="line">            <span class="comment">// 祖父节点变红色</span></span><br><span class="line">            <span class="comment">// 新节点指向祖父节点, 继续向上迭代</span></span><br><span class="line">            <span class="keyword">if</span> ((xppr = xpp.right) != <span class="keyword">null</span> &amp;&amp; xppr.red) &#123;</span><br><span class="line">                xppr.red = <span class="keyword">false</span>;</span><br><span class="line">                xp.red = <span class="keyword">false</span>;</span><br><span class="line">                xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                x = xpp;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 黑叔</span></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">            	<span class="comment">// 新节点位于祖父节点的左孩子的右子树, 需要先左旋, 具体方法看下面</span></span><br><span class="line">            	<span class="comment">// 左旋完成后当前节点变成父节点, 原来的父节点变成了当前节点, 这是为下面右旋准备</span></span><br><span class="line">                <span class="keyword">if</span> (x == xp.right) &#123;</span><br><span class="line">                    root = rotateLeft(root, x = xp);</span><br><span class="line">                    xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 右旋, 具体方法看下面</span></span><br><span class="line">                <span class="comment">// 父节点(原来新节点)变黑色, 祖父节点变红色</span></span><br><span class="line">                <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    xp.red = <span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                        root = rotateRight(root, xpp);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 红父, 并且该节点是祖父节点的右子树</span></span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 红叔, 只要修改颜色即可, 参考上面</span></span><br><span class="line">            <span class="keyword">if</span> (xppl != <span class="keyword">null</span> &amp;&amp; xppl.red) &#123;</span><br><span class="line">                xppl.red = <span class="keyword">false</span>;</span><br><span class="line">                xp.red = <span class="keyword">false</span>;</span><br><span class="line">                xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                x = xpp;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 黑叔</span></span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">            	<span class="comment">// 新节点位于祖父节点右孩子的左子树, 需要先右旋</span></span><br><span class="line">                <span class="keyword">if</span> (x == xp.left) &#123;</span><br><span class="line">                    root = rotateRight(root, x = xp);</span><br><span class="line">                    xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 然后统一左旋, 处理跟上面一样</span></span><br><span class="line">                <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    xp.red = <span class="keyword">false</span>;</span><br><span class="line">                    <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        xpp.red = <span class="keyword">true</span>;</span><br><span class="line">                        root = rotateLeft(root, xpp);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 左旋, 实际是通过修改节点的父与子指针来实现</span></span><br><span class="line"><span class="comment"> * root: 根节点</span></span><br><span class="line"><span class="comment"> * p: 新节点的父节点</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> &lt;K,V&gt; <span class="function">TreeNode&lt;K,V&gt; <span class="title">rotateLeft</span><span class="params">(TreeNode&lt;K,V&gt; root,</span></span></span><br><span class="line"><span class="function"><span class="params">                                              TreeNode&lt;K,V&gt; p)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// r: p 的右孩子</span></span><br><span class="line">    <span class="comment">// pp: p 的父节点</span></span><br><span class="line">    <span class="comment">// rl: p 的右孩子的左孩子</span></span><br><span class="line">    TreeNode&lt;K,V&gt; r, pp, rl;</span><br><span class="line">    <span class="comment">// 过滤参数错误的情况, 判断是否能够进行左旋</span></span><br><span class="line">    <span class="keyword">if</span> (p != <span class="keyword">null</span> &amp;&amp; (r = p.right) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((rl = p.right = r.left) != <span class="keyword">null</span>)</span><br><span class="line">            rl.parent = p;</span><br><span class="line">        <span class="keyword">if</span> ((pp = r.parent = p.parent) == <span class="keyword">null</span>)</span><br><span class="line">            (root = r).red = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (pp.left == p)</span><br><span class="line">            pp.left = r;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            pp.right = r;</span><br><span class="line">        r.left = p;</span><br><span class="line">        p.parent = r;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 右旋, 实际是通过修改节点的父与子指针来实现</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> &lt;K,V&gt; <span class="function">TreeNode&lt;K,V&gt; <span class="title">rotateRight</span><span class="params">(TreeNode&lt;K,V&gt; root,</span></span></span><br><span class="line"><span class="function"><span class="params">                                               TreeNode&lt;K,V&gt; p)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// l: p 的左孩子</span></span><br><span class="line">    <span class="comment">// pp: p 的父节点</span></span><br><span class="line">    <span class="comment">// lr: p 的左孩子的右孩子</span></span><br><span class="line">    TreeNode&lt;K,V&gt; l, pp, lr;</span><br><span class="line">    <span class="keyword">if</span> (p != <span class="keyword">null</span> &amp;&amp; (l = p.left) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((lr = p.left = l.right) != <span class="keyword">null</span>)</span><br><span class="line">            lr.parent = p;</span><br><span class="line">        <span class="keyword">if</span> ((pp = l.parent = p.parent) == <span class="keyword">null</span>)</span><br><span class="line">            (root = l).red = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (pp.right == p)</span><br><span class="line">            pp.right = l;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            pp.left = l;</span><br><span class="line">        l.right = p;</span><br><span class="line">        p.parent = l;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="moveRootToFront"><a href="#moveRootToFront" class="headerlink" title="moveRootToFront"></a>moveRootToFront</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 红黑树经过旋转后有可能修改根节点, 该方法把数组索引位置指向新根节点, 并修改对应的前后节点</span></span><br><span class="line"><span class="comment"> * tab: 存储数组</span></span><br><span class="line"><span class="comment"> * root: 根节点</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">static</span> &lt;K,V&gt; <span class="function"><span class="keyword">void</span> <span class="title">moveRootToFront</span><span class="params">(Node&lt;K,V&gt;[] tab, TreeNode&lt;K,V&gt; root)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="keyword">if</span> (root != <span class="keyword">null</span> &amp;&amp; tab != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> index = (n - <span class="number">1</span>) &amp; root.hash;</span><br><span class="line">        TreeNode&lt;K,V&gt; first = (TreeNode&lt;K,V&gt;)tab[index];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 索引位置不是根节点</span></span><br><span class="line">        <span class="keyword">if</span> (root != first) &#123;</span><br><span class="line">            Node&lt;K,V&gt; rn;</span><br><span class="line">            tab[index] = root;</span><br><span class="line">            TreeNode&lt;K,V&gt; rp = root.prev;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 既然重置了根节点, 那么双向链表的头结点就只能是新根节点</span></span><br><span class="line">            <span class="comment">// 所以需要对树的双向链表进行重置了</span></span><br><span class="line">            <span class="comment">// 把根节点前后节点进行连接, 同时根节点 next 指向原来头节点</span></span><br><span class="line">            <span class="comment">// 假设原来的双向链表结构是: A&lt;=&gt;B&lt;=&gt;C&lt;=&gt;D, 其中 C 为新根节点</span></span><br><span class="line">            <span class="comment">// 那么先将 C 前后节点 B D 连接: C, A&lt;=&gt;B&lt;=&gt;D</span></span><br><span class="line">            <span class="comment">// 然后 C 和原来头结点 A 连接: C&lt;=&gt;A&lt;=&gt;B&lt;=&gt;D</span></span><br><span class="line">            <span class="keyword">if</span> ((rn = root.next) != <span class="keyword">null</span>)</span><br><span class="line">                ((TreeNode&lt;K,V&gt;)rn).prev = rp;</span><br><span class="line">            <span class="keyword">if</span> (rp != <span class="keyword">null</span>)</span><br><span class="line">                rp.next = rn;</span><br><span class="line">            <span class="keyword">if</span> (first != <span class="keyword">null</span>)</span><br><span class="line">                first.prev = root;</span><br><span class="line">            root.next = first;</span><br><span class="line">            root.prev = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">assert</span> <span class="title">checkInvariants</span><span class="params">(root)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>经过上面的分析我们就可以得出 HashMap 对于树节点插入的大概过程了</p>
+<ol>
+<li>从根节点开始遍历, 比较哈希值, 小于就向左遍历, 大于就向右遍历, 等于就返回节点;</li>
+<li>遍历到最后把新节点插入, 这时候要看新节点是位于祖父节点的左子树还是右子树, 还要看父叔节点颜色;</li>
+<li>新节点是祖父左子树, 并且红父红叔, 那么只要修改颜色即可;</li>
+<li>新节点是祖父左子树, 并且红父黑叔, 这时如果是位于父节点的右子树, 需要先左旋, 然后统一右旋和修改颜色;</li>
+<li>新节点是祖父右子树, 并且红父红叔, 那么同样只修改颜色即可;</li>
+<li>新节点是祖父右子树, 并且红父黑叔, 这时如果是位于父节点的左子树, 需要先右旋, 然后统一左旋和修改颜色.</li>
+</ol>
+<p>篇幅原因, 关于树的另一个方法 treeifyBin() 就留到下一 part 再来讲.</p>
+<hr>
+<blockquote>
+<p><em>如果有疑问欢迎来 <a href="https://github.com/mysterin/mysterin.github.io/issues" target="_blank" rel="noopener">Issues</a> 探讨</em></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HashMap/" rel="tag"># HashMap</a>
+          
+            <a href="/tags/putTreeVal/" rel="tag"># putTreeVal</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/15/HashMap-详解四/" rel="next" title="HashMap 详解四">
+                <i class="fa fa-chevron-left"></i> HashMap 详解四
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/21/HashMap-详解六/" rel="prev" title="HashMap 详解六">
+                HashMap 详解六 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">mysterin</p>
+              <p class="site-description motion-element" itemprop="description">mysterin</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#红黑树性质"><span class="nav-number">1.</span> <span class="nav-text">红黑树性质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#红黑树与-AVL-树的区别"><span class="nav-number">2.</span> <span class="nav-text">红黑树与 AVL 树的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#红黑树插入"><span class="nav-number">3.</span> <span class="nav-text">红黑树插入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#putTreeVal"><span class="nav-number">4.</span> <span class="nav-text">putTreeVal()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#balanceInsertion"><span class="nav-number">5.</span> <span class="nav-text">balanceInsertion()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#moveRootToFront"><span class="nav-number">6.</span> <span class="nav-text">moveRootToFront</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">mysterin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
